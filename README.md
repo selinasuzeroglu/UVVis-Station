@@ -1,4 +1,3 @@
-"# UVVis-2.0" 
+# **UVVis-Station**
 
-
-Adam changes - test only
+Python script that automates the execution and analysis of UVVis spectroscopy.
