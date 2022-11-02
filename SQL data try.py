@@ -3,6 +3,16 @@ import pyodbc
 import pandas as pd
 import numpy as np
 
+
+import matplotlib
+matplotlib.use('TkAgg')
+import numpy as np
+import os
+import sys
+from scipy.interpolate import interp1d
+from scipy.signal import savgol_filter
+import matplotlib.pyplot as plt
+
 cnxn_str = ("Driver={SQL Server};"
             "Server=MU00195249\ZEISSSQL;"
             "Database=InProcess;"
@@ -107,14 +117,27 @@ cursor.execute(sql_command)
 data = pd.read_sql('SELECT [Value], [Wavelength] FROM table12',cnxn)
 
 
-#Wavelength = pd.read_sql('SELECT [Wavelength] FROM table12',cnxn)
-
-#Value = pd.read_sql('SELECT [Value] FROM table12',cnxn)
-
-spectrum = data.to_numpy().astype(np.float)
-
-print(spectrum)
 
 
 
 
+spectrum = data.to_numpy().astype(float)
+
+def GetHv(x):
+    return (6.626070e-34 * 299792458) / (x * 1e-9) * 6.242e18
+
+def GetAlpha(A, d):  #=a
+    return (A/d)
+
+def GetOrdinate(hv,a,r):
+    return (hv*a)**(1/r)
+
+
+λ = spectrum[:, 0]
+A = spectrum[:, 1] # Absorbance has to be put in spectrum: right now value = transmission
+
+tauc_spectrum = np.zeros((len(spectrum),2))
+tauc_spectrum[:, 0] = GetHv(λ)
+tauc_spectrum[:, 1] = GetOrdinate(GetHv(λ),GetAlpha(A, d))
+
+print(tauc_spectrum)
