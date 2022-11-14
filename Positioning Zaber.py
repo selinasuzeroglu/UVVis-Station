@@ -26,62 +26,42 @@ with Connection.open_serial_port("COM7") as connection:
         axis_v.home(wait_until_idle=False)
         axis_h.home(wait_until_idle=False)
 
-#checking is device 1 is homed three times
-    #1
-    if axis_v.is_homed():
-        pass
-    else:
+#checking is device  is homed three times
+attempts_v = 0
+while attempts_v < 3:
+    try:
         axis_v.home()
-    #2
-    if axis_v.is_homed():
-        pass
-    else:
-    axis_v.home()
-    #3
-    if axis_v.is_homed():
-        pass
-    else:
-        axis_v.home()
+        break
+    except:
+        axis_v.is_homed()
+        print("Axis 1 is homed")
+        break
 
-# checking is device 2 is homed three times
-    #1
-    if axis_h.is_homed():
-        pass
-    else:
+attempts_h = 0
+while attempts_h < 3:
+    try:
         axis_h.home()
-    #2
-    if axis_h.is_homed():
-        pass
-    else:
-        axis_h.home()
-    #3
-    if axis_h.is_homed():
-        pass
-    else:
-        axis_h.home()
+        break
+    except:
+        axis_h.is_homed()
+        print("Axis 2 is homed")
+        break
 
+
+
+position_place_on = place_on().get_position(Units.LENGTH_MILLIMETRES)
 
 #placing sample in desired position
-    place_on(100, 100)
+place_on(100, 100)
 
-
-
-#checking position three times
-    #1
-    if place_on(100,100):
-        pass
-    else:
+attempts = 0
+while attempts < 3:
+    try:
         place_on(100, 100)
-    #2
-    if place_on(100, 100):
-        pass
-    else:
-        place_on(100, 100)
-    #3
-    if place_on(100, 100):
-        pass
-    else:
-        place_on(100, 100)
+        break
+    except:
+        print("Sample is placed")
+        break
 
 
 
