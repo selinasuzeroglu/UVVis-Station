@@ -14,8 +14,9 @@ cnxn = pyodbc.connect(cnxn_str)
 
 cursor = cnxn.cursor()
 
-
-sql_command = """CREATE TABLE table12 (
+#Writing SQL queries in Python
+# 1) Create Table
+create_csv_table = """CREATE TABLE table12 (
        [Time_v] VARCHAR(max),
 	   [Time_w] VARCHAR(max),
 	   ResultName_v VARCHAR(max),
@@ -24,9 +25,12 @@ sql_command = """CREATE TABLE table12 (
 	   [Wavelength] VARCHAR(max)
 )
 ;"""
-cursor.execute(sql_command)
 
-sql_command = """DECLARE @RowNo_w int =1;
+cursor.execute(create_csv_table) # Executing SQL queries in Python
+
+
+# 2) Create recursive CTE
+create_transponed_table = """DECLARE @RowNo_w int =1;
 DECLARE @RowNo_v int =1;
 WITH cte_split_w(ROWNO_w, [Timestamp_w], ResultName_w, split_wavelengths, [Wavelengths]) AS
 (
@@ -101,17 +105,20 @@ ORDER BY split_wavelengths
 option (maxrecursion 0);
 """
 
-cursor.execute(sql_command)
+#Later we can adjust the data output by choosing, f.e. only the 1000 newest data rows. Attention: ResultName has to be the same though, otherwise we would have to manipulate the data within SQL
 
-#data from SQL
-data = pd.read_sql('SELECT [Value], [Wavelength] FROM table12',cnxn)
+cursor.execute(create_transponed_table)
+
+
+data = pd.read_sql('SELECT [Value], [Wavelength] FROM table12',cnxn) #data from SQL as type 'pandas.core.frame.DataFrame'
+
 
 
 #Wavelength = pd.read_sql('SELECT [Wavelength] FROM table12',cnxn)
 
 #Value = pd.read_sql('SELECT [Value] FROM table12',cnxn)
 
-spectrum = data.to_numpy().astype(np.float)
+spectrum = data.to_numpy().astype(np.float) #convert dataframe to array
 
 print(spectrum)
 
