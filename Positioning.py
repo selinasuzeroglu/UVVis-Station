@@ -1,9 +1,10 @@
 from zaber_motion import Units, Library
 from zaber_motion.ascii import Connection
-from Microswitch_InProcess_Connection import Microswitch
-from SQL_in_Python import spectrum
+# from Microswitch_InProcess_Connection import Microswitch
+from try1 import Microswitch
 
 Library.enable_device_db_store()
+Connection.open_serial_port("COM7")
 
 with Connection.open_serial_port("COM7") as connection:
     device_list = connection.detect_devices()
@@ -15,38 +16,36 @@ with Connection.open_serial_port("COM7") as connection:
     axis_h = device_h.get_axis(1)  # get axis (1 out of 1) for device_v
     axis_v = device_v.get_axis(1)  # get axis (1 out of 1) for device_h
 
-    h = 5
-    v = 5
+    h = 50
+    v = 50
 
     retries = 0
     max_retries = 4
+
 
     def place_on_sample(h, v):
         axis_h.move_absolute(h, Units.LENGTH_MILLIMETRES, wait_until_idle=True)
         axis_v.move_absolute(v, Units.LENGTH_MILLIMETRES, wait_until_idle=True)
 
 
+    # do we need that?
     def place_off_sample():
         axis_v.home(wait_until_idle=False)
         axis_h.home(wait_until_idle=False)
 
 
-    position_h = 8063.0 * h        #1mm gets 0.863mm as position
+    position_h = 8063.0 * h  # 1mm gets 0.863mm as position
     position_v = 8063.0 * v
-
-
 
     while retries < max_retries:
         if connection.home_all(wait_until_idle=True):
             print("Axes are homed")
-            break  #has to go
+            break  # has to go
         else:
             connection.home_all(wait_until_idle=True)
-            break  #has to go
+            break  # has to go
 
-        retries += 1
-
-
+    retries += 1
 
     while retries < max_retries:
         if axis_h.get_position() == position_h and axis_v.get_position() == position_v:
@@ -58,18 +57,12 @@ with Connection.open_serial_port("COM7") as connection:
             axis_h.park()
             axis_v.park()
 
-        retries += 1
-
-
+    retries += 1
 
     print(axis_h.get_position())
     print(axis_v.get_position())
     axis_h.unpark()
     axis_v.unpark()
 
-
-
-    # # connection.close()
-    # # Microswitch()
-    # # print(spectrum)
-    # # #add SQL
+   # connection.close()
+   # Microswitch()

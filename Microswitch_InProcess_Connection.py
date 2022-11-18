@@ -1,6 +1,6 @@
 import serial
 import time
-from SQL_in_Python import spectrum
+#from SQL_in_Python import spectrum
 
 def Microswitch():
 
@@ -16,9 +16,9 @@ def Microswitch():
             decoded_bytes = float(Micro_bytes[0:len(Micro_bytes)-2].decode("utf-8"))
             if decoded_bytes == float(0.0):
                 InProcess.write((bytes([0])))
-                print("ok")
-               # print(spectrum)
-               # break
+                print("Sample Holder in Position")
+                # print(spectrum)
+                # break
             else:
                 print("Sample Holder NOT in Position")
 
@@ -29,3 +29,5 @@ def Microswitch():
 
     MicroSwitch.close()
     InProcess.close()
+
+Microswitch()
