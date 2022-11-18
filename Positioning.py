@@ -18,6 +18,8 @@ with Connection.open_serial_port("COM7") as connection:
     h = 5
     v = 5
 
+    retries = 0
+    max_retries = 4
 
     def place_on_sample(h, v):
         axis_h.move_absolute(h, Units.LENGTH_MILLIMETRES, wait_until_idle=True)
@@ -29,36 +31,36 @@ with Connection.open_serial_port("COM7") as connection:
         axis_h.home(wait_until_idle=False)
 
 
-    position_h = 8063.0 * h
+    position_h = 8063.0 * h        #1mm gets 0.863mm as position
     position_v = 8063.0 * v
 
 
-    # attempts_axis = 0
-    # while attempts_axis < 3:
-    #     if connection.home_all(wait_until_idle=True):
-    #         print("Axes are homed")
-    #         break
-    #     else:
-    #         connection.home_all(wait_until_idle=True)
-    #         break
 
-    # place_on_sample(4, 4)   #1mm gets 0.863mm as position
-    # print(axis_h.get_position())
-    # print(axis_v.get_position())
+    while retries < max_retries:
+        if connection.home_all(wait_until_idle=True):
+            print("Axes are homed")
+            break  #has to go
+        else:
+            connection.home_all(wait_until_idle=True)
+            break  #has to go
 
-    attempts = 0
-    while attempts < 3:
+        retries += 1
+
+
+
+    while retries < max_retries:
         if axis_h.get_position() == position_h and axis_v.get_position() == position_v:
             axis_h.park()
             axis_v.park()
             print("Sample is placed")
-            break
         else:
             place_on_sample(h, v)
             axis_h.park()
             axis_v.park()
-            print("Sample is placed")
-            break
+
+        retries += 1
+
+
 
     print(axis_h.get_position())
     print(axis_v.get_position())
