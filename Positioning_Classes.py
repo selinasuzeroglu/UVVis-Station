@@ -7,14 +7,11 @@ with Connection.open_serial_port("COM7") as connection:
     device_list = connection.detect_devices()
     print("Found {} devices".format(len(device_list)))
 
-    device0 = device_list[0]
-    device1 = device_list[1]
+    device1 = device_list[0]
+    device2 = device_list[1]
 
-    axis_1 = device0.get_axis(1)  # get axis (1 out of 1) for device_v
-    axis_2 = device1.get_axis(1)  # get axis (1 out of 1) for device_h
-
-    retries = 0
-    max_retries = 4
+    axis_1 = device1.get_axis(1)  # get axis (1 out of 1) for device_v
+    axis_2 = device2.get_axis(1)  # get axis (1 out of 1) for device_h
 
 
     class Axis:
@@ -43,7 +40,7 @@ with Connection.open_serial_port("COM7") as connection:
 
     def homing():
         for i in range(0, 3):
-            if connection.home_all(wait_until_idle=True):
+            if connection.home_all(wait_until_idle=True):  #home all devices or, alternatively, use same approach as for placing: for axis in axes_posn: axis.place_off_sample()
                 print("Axes are homed")
                 break  # has to go
             else:
