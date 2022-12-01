@@ -41,7 +41,6 @@ with Connection.open_serial_port("COM7") as connection:
         def unpark(self):
             self.axis.unpark()
 
-
     def homing():
         for i in range(0, 3):
             if connection.home_all(wait_until_idle=True):
@@ -50,27 +49,25 @@ with Connection.open_serial_port("COM7") as connection:
             else:
                 connection.home_all(wait_until_idle=True)
                 break  # has to go
+    def placing(axes_posn):
+        for i in range(0, 3):
+            if all(axis.__eq__() is True for axis in axes_posn):
+                for axis in axes_posn:
+                    axis.park()
+                print("Sample is placed")
+            else:
+                for axis in axes_posn:
+                    axis.place_on_sample()
+                    axis.park()
 
 
+    #Define your axes and their 1st position:
     axis1_pos1 = Axis(axis_1, 20)
     axis2_pos1 = Axis(axis_2, 20)
 
-   # pos1 = [axis1_pos1, axis2_pos1]
+    axes_pos1 = [axis1_pos1, axis2_pos1]  #creating lists of axes in their 1st position
+    # other lists can follow with subsequent position: pos2, pos3, ...
 
+    placing(axes_pos1)
 
-    # __eq__(Axis)
-
-    def placing():
-        for i in range(0, 3):
-            if axis1_pos1.__eq__() and axis2_pos1.__eq__():
-                axis1_pos1.park()
-                axis2_pos1.park()
-                print("Sample is placed")
-            else:
-                axis1_pos1.place_on_sample()
-                axis2_pos1.place_on_sample()
-                axis1_pos1.park()
-                axis2_pos1.park()
-
-
-    placing()
+    #unpark
