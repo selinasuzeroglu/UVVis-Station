@@ -1,10 +1,10 @@
 from zaber_motion import Units, Library
 from zaber_motion.ascii import Connection
 # from Microswitch_InProcess_Connection import Microswitch
-from try1 import Microswitch
+#from try1 import Microswitch
 
 Library.enable_device_db_store()
-Connection.open_serial_port("COM7")
+
 
 with Connection.open_serial_port("COM7") as connection:
     device_list = connection.detect_devices()
@@ -37,32 +37,32 @@ with Connection.open_serial_port("COM7") as connection:
     position_h = 8063.0 * h  # 1mm gets 0.863mm as position
     position_v = 8063.0 * v
 
-    while retries < max_retries:
-        if connection.home_all(wait_until_idle=True):
-            print("Axes are homed")
-            break  # has to go
-        else:
-            connection.home_all(wait_until_idle=True)
-            break  # has to go
+    def homing():
+        for i in range(0, 3):
+            if connection.home_all(wait_until_idle=True):
+                print("Axes are homed")
+                break  # has to go
+            else:
+                connection.home_all(wait_until_idle=True)
+                break  # has to go
 
-    retries += 1
 
-    while retries < max_retries:
-        if axis_h.get_position() == position_h and axis_v.get_position() == position_v:
-            axis_h.park()
-            axis_v.park()
-            print("Sample is placed")
-        else:
-            place_on_sample(h, v)
-            axis_h.park()
-            axis_v.park()
+    def placing():
+        for i in range(0, 3):
+            if axis_h.get_position() == position_h and axis_v.get_position() == position_v:
+                axis_h.park()
+                axis_v.park()
+                print("Sample is placed")
+            else:
+                place_on_sample(h, v)
+                axis_h.park()
+                axis_v.park()
 
-    retries += 1
+    placing()
 
     print(axis_h.get_position())
     print(axis_v.get_position())
     axis_h.unpark()
     axis_v.unpark()
 
-   # connection.close()
    # Microswitch()
