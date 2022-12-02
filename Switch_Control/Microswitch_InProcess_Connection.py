@@ -1,6 +1,6 @@
 import serial
 import time
-#from SQL_in_Python import spectrum
+
 
 def Microswitch():
 
