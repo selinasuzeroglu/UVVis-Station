@@ -37,13 +37,14 @@ dataframe = pd.DataFrame(wavelength_transpone, columns=['wavelength'])
 values = data.Values.str.split(";", expand=True,)
 values_transpone = values.transpose()
 
-data = [[wavelength_transpone, values_transpone]]
 
+index = df[df['ResultName']=='Transmission'].index.values
 
-print(df)
-index = df[df['ResultName']=='Reflection of Sample'].index.values
+wavelength_index = wavelength_transpone.iloc[:, index]
+values_index = values_transpone.iloc[:, index]
 
-print(index)
-print(wavelength_transpone.iloc[:, index])
+result = pd.concat([wavelength_index, values_index], axis=1, join="inner")
 #print(df_transpone.columns['Absorption'])
 
+
+print(result)
