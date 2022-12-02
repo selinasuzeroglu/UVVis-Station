@@ -44,5 +44,6 @@ print(df)
 index = df[df['ResultName']=='Reflection of Sample'].index.values
 
 print(index)
+print(wavelength_transpone.iloc[:, index])
 #print(df_transpone.columns['Absorption'])
 
