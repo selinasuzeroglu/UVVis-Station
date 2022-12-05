@@ -1,5 +1,6 @@
 import pyodbc
 import pandas as pd
+from ismember import ismember
 
 
 cnxn_str = ("Driver={SQL Server};"
@@ -22,27 +23,35 @@ product_name = data.ProductName.str.split(";", expand=True,)
 
 class InProcessData:
 
-    def __init__(self, measurement_name, column_name):
-        self.measurement_name = measurement_name
-        self.column_name = column_name
+    def __init__(self, product, result, column):
+        self.product = product
+        self.result = result
+        self.column = column
 
     def get_data(self):
-        transposed_data = self.column_name.transpose()
+        transposed_data = self.column.transpose()
         result_name.rename(columns={0: 'ResultName'}, inplace=True)
-        index = result_name[result_name['ResultName'] == self.measurement_name].index.values
-        data = transposed_data.iloc[:, index]
+        product_name.rename(columns={0: 'ProductName'}, inplace=True)
+        result_index = result_name[result_name['ResultName'] == self.result].index.values
+        product_index = product_name[product_name['ProductName'] == self.product].index.values
+        data_index = list(set(product_index).intersection(result_index))
+        newest_data_index = max(data_index) # to get newest data with desired ProductName and ResultName
+        data = transposed_data.iloc[:, newest_data_index]
         return data
+
 
 def joining_data(table):
     results = pd.concat(table, axis=1, join="inner")
     print(results)
 
 
-transmission_wavelength = InProcessData('Transmission', wavelengths).get_data()
-transmission_values = InProcessData('Transmission', values).get_data()
-
-table_example = [transmission_wavelength, transmission_values]
-
-
-joining_data(table_example)
-
+example1 = InProcessData('UVVis', 'Absorptance', values).get_data()
+print(example1)
+# transmission_wavelength = InProcessData('Transmission', wavelengths).get_data()
+# transmission_values = InProcessData('Transmission', values).get_data()
+#
+# table_example = [transmission_wavelength, transmission_values]
+#
+#
+# joining_data(table_example)
+#
