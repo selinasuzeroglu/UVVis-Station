@@ -1,21 +1,23 @@
-int Lswitch = 7;  
+int InProcess = 7;  
+
 
 void setup()
 {
   Serial.begin(9600); 
-  pinMode(Lswitch, INPUT); 
- 
+  pinMode(InProcess, OUTPUT); 
+  digitalWrite (InProcess, LOW);
 }
 
 void loop()
-{  
-  switch (digitalRead(Lswitch)) {
-    case LOW:
-       Serial.println(digitalRead(7));  //in the future we will have initialize measurements in that position 
-      break;
-    case HIGH:
-      Serial.println(digitalRead(7));
-      break;
+{
+ while (Serial.available())  
+ if ((Serial.read() == 0))
+  { 
+    digitalWrite (InProcess, HIGH);
   }
-  digitalWrite(Lswitch, HIGH); 
+ else if ((Serial.read() == 1))
+  {
+    digitalWrite (InProcess, LOW);
+  }
+ digitalWrite(InProcess, LOW);
 }
