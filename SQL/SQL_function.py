@@ -2,7 +2,7 @@ import pyodbc
 import pandas as pd
 
 
-def getting_data(product, result):
+def fire_results(product, result):
     cnxn_str = ("Driver={SQL Server};"
                 "Server=MU00195249\ZEISSSQL;"
                 "Database=InProcess;"
@@ -35,8 +35,8 @@ def getting_data(product, result):
             product_index = product_name[product_name['ProductName'] == self.product].index.values
             data_index = list(set(product_index).intersection(result_index))
             recent_data_index = max(data_index)  # to get newest data with desired ProductName and ResultName
-            data = transposed_data.iloc[:, recent_data_index]
-            return data
+            transposed_data = transposed_data.iloc[:, recent_data_index]
+            return transposed_data
 
     def joining_data(product_table, result_table):
         value_column = InProcessData(product_table, result_table, values).get_data()
@@ -49,4 +49,4 @@ def getting_data(product, result):
     cnxn.close()
 
 
-
+#fire_results('test', 'Transmission')
