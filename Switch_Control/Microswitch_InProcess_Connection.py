@@ -2,7 +2,7 @@ import serial
 import time
 
 
-def Microswitch():
+def microswitch():
 
     MicroSwitch = serial.Serial('COM6', 9600, timeout=1)
     InProcess = serial.Serial('COM9', 9600, timeout=1)
@@ -17,7 +17,6 @@ def Microswitch():
             if decoded_bytes == float(0.0):
                 InProcess.write((bytes([0])))
                 print("Sample Holder in Position")
-                # print(spectrum)
                 # break
             else:
                 print("Sample Holder NOT in Position")
@@ -30,4 +29,4 @@ def Microswitch():
     MicroSwitch.close()
     InProcess.close()
 
-Microswitch()
+

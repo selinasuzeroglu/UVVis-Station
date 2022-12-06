@@ -1,7 +1,5 @@
 import pyodbc
 import pandas as pd
-from ismember import ismember
-
 
 cnxn_str = ("Driver={SQL Server};"
             "Server=MU00195249\ZEISSSQL;"
@@ -15,10 +13,11 @@ cursor = cnxn.cursor()
 spectrum = '''SELECT * FROM InProcess.dbo.VSpectra'''
 data = pd.read_sql(spectrum, cnxn)
 
-result_name = data.ResultName.str.split(";", expand=True,)
-wavelengths = data.Wavelengths.str.split(";", expand=True,)
-values = data.Values.str.split(";", expand=True,)
-product_name = data.ProductName.str.split(";", expand=True,)
+result_name = data.ResultName.str.split(";", expand=True, )
+product_name = data.ProductName.str.split(";", expand=True, )
+
+wavelengths = data.Wavelengths.str.split(";", expand=True, )
+values = data.Values.str.split(";", expand=True, )
 
 
 class InProcessData:
@@ -35,9 +34,12 @@ class InProcessData:
         result_index = result_name[result_name['ResultName'] == self.result].index.values
         product_index = product_name[product_name['ProductName'] == self.product].index.values
         data_index = list(set(product_index).intersection(result_index))
-        newest_data_index = max(data_index) # to get newest data with desired ProductName and ResultName
-        data = transposed_data.iloc[:, newest_data_index]
+        recent_data_index = max(data_index)  # to get newest data with desired ProductName and ResultName
+        data = transposed_data.iloc[:, recent_data_index]
         return data
+
+
+
 
 
 def joining_data(table):
@@ -45,8 +47,10 @@ def joining_data(table):
     print(results)
 
 
-example1 = InProcessData('UVVis', 'Absorptance', values).get_data()
+example1 = InProcessData('test', 'Transmission', values).get_data()
+
 print(example1)
+
 # transmission_wavelength = InProcessData('Transmission', wavelengths).get_data()
 # transmission_values = InProcessData('Transmission', values).get_data()
 #
