@@ -78,4 +78,4 @@ with Connection.open_serial_port("COM7") as connection:
     placing(axes_pos1)
 
 microswitch()
-#fire_signal('test', 'Transmission') #we need further arduino board for this
+#fire_signal('test', 'Transmission') #we need further arduino board
