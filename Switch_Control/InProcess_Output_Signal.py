@@ -2,6 +2,11 @@ import serial
 import time
 
 
+import serial
+import time
+from SQL import fire_results
+
+
 def fire_signal():
 
     InProcessOutput = serial.Serial('COM6', 9600, timeout=1) #change in the future to fitting port
@@ -13,9 +18,10 @@ def fire_signal():
             Micro_bytes = InProcessOutput.readline()
             decoded_bytes = float(Micro_bytes[0:len(Micro_bytes)-2].decode("utf-8"))
             if decoded_bytes == float(0.0):
-                print("Measurement finished")
+                #print("Measurement started")
+                time.sleep(10)
+                fire_results('test', 'Transmission')
                 break
-                #SQL data analysis
             else:
                 print("Waiting for Measurement to start")
 
@@ -25,4 +31,5 @@ def fire_signal():
 
     InProcessOutput.close()
 
-fire_signal()
+
+#fire_signal('test', 'Transmission')
