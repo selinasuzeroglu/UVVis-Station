@@ -1,6 +1,6 @@
 from zaber_motion import Units, Library
 from zaber_motion.ascii import Connection
-from Micro import Microswitch
+from Tests.Micro import Microswitch
 
 
 Library.enable_device_db_store()
