@@ -42,20 +42,12 @@ class InProcessData:
 
 
 
-def joining_data(table):
+def joining_data(product, result):
+    value_column = InProcessData(product, result, values).get_data()
+    wavelength_column = InProcessData(product, result, wavelengths).get_data()
+    table = [wavelength_column, value_column]
     results = pd.concat(table, axis=1, join="inner")
     print(results)
 
 
-example1 = InProcessData('test', 'Transmission', values).get_data()
-
-print(example1)
-
-# transmission_wavelength = InProcessData('Transmission', wavelengths).get_data()
-# transmission_values = InProcessData('Transmission', values).get_data()
-#
-# table_example = [transmission_wavelength, transmission_values]
-#
-#
-# joining_data(table_example)
-#
+joining_data('test', 'Transmission')

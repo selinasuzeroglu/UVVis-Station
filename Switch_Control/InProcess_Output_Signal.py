@@ -13,11 +13,11 @@ def fire_signal():
             Micro_bytes = InProcessOutput.readline()
             decoded_bytes = float(Micro_bytes[0:len(Micro_bytes)-2].decode("utf-8"))
             if decoded_bytes == float(0.0):
-                print("Measurement started")
+                print("Measurement finished")
                 break
                 #SQL data analysis
             else:
-                print("Measurement didn't start")
+                print("Waiting for Measurement to start")
 
         except:
             print("Interrupt")
