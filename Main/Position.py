@@ -1,7 +1,7 @@
 from zaber_motion import Units, Library
 from zaber_motion.ascii import Connection
-from Micro import microswitch
-#from Output import fire_signal
+from Trigger_InProcess_Input import microswitch
+from Trigger_InProcess_Output import fire_signal
 
 Library.enable_device_db_store()
 
@@ -78,4 +78,4 @@ with Connection.open_serial_port("COM7") as connection:
     placing(axes_pos1)
 
 microswitch()
-#fire_signal('test', 'Transmission') #we need further arduino board
+fire_signal('InProcess Test', 'Transmission')
