@@ -5,7 +5,7 @@ void setup()
 {
   Serial.begin(9600); 
   pinMode(InProcess, OUTPUT); 
-  digitalWrite (InProcess, LOW);
+  digitalWrite (InProcess, HIGH);
 }
 
 void loop()
@@ -13,11 +13,12 @@ void loop()
  while (Serial.available())  
  if ((Serial.read() == 0))
   { 
-    digitalWrite (InProcess, HIGH);
+    digitalWrite (InProcess, LOW);
+    delay(100);
   }
  else if ((Serial.read() == 1))
   {
-    digitalWrite (InProcess, LOW);
+    digitalWrite (InProcess, HIGH);
   }
- digitalWrite(InProcess, LOW);
+ digitalWrite(InProcess, HIGH);
 }
