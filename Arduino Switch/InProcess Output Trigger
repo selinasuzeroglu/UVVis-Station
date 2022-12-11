@@ -12,7 +12,7 @@ void loop()
 {  
   switch (digitalRead(InProcessOutput)) {
     case LOW:
-       Serial.println(digitalRead(InProcessOutput));  //in the future we will have initialize measurements in that position 
+       Serial.println(digitalRead(InProcessOutput));  
       break;
     case HIGH:
       Serial.println(digitalRead(InProcessOutput));
