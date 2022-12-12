@@ -17,7 +17,7 @@ def fire_signal(product, result):
                 fire_results(product, result)
                 break
             else:
-                print("Waiting for Measurement to start")
+                print("Waiting for Measurement to end")
 
         except:
             print("Interrupt")

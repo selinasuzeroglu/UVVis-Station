@@ -28,5 +28,3 @@ def microswitch():
 
     MicroSwitch.close()
     InProcess.close()
-
-

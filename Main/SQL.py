@@ -34,9 +34,10 @@ def fire_results(product, result):
             result_index = result_name[result_name['ResultName'] == self.result].index.values
             product_index = product_name[product_name['ProductName'] == self.product].index.values
             data_index = list(set(product_index).intersection(result_index))
-            recent_data_index = max(data_index)  # to get newest data with desired ProductName and ResultName
-            transposed_data = transposed_data.iloc[:, recent_data_index]
-            return transposed_data
+            recent_data_index = max(data_index)
+            transposed_data = self.column.transpose()
+            desired_data = transposed_data.iloc[:, recent_data_index]
+            return desired_data
 
     def joining_data(product_table, result_table):
         value_column = InProcessData(product_table, result_table, values).get_data()
@@ -49,6 +50,3 @@ def fire_results(product, result):
     cnxn.close()
 
 #fire_results('InProcess Output Test', 'Reflection')
-
-
-
