@@ -1,0 +1,30 @@
+import serial
+
+
+def microswitch():
+    MicroSwitch = serial.Serial('COM6', 9600, timeout=1)
+    InProcess = serial.Serial('COM9', 9600, timeout=1)
+    MicroSwitch.flushInput() #unnecessary input deleted
+    InProcess.flushInput()
+    while True:
+        try:
+            Micro_bytes = MicroSwitch.readline()
+            decoded_bytes = float(Micro_bytes[0:len(Micro_bytes) - 2].decode("utf-8"))
+            if decoded_bytes == float(0.0): # if axis is at right position, microswitch clicks and sends 'LOW'/Ground signal to python.
+                InProcess.write((bytes([0]))) #as soon as python detects LOW trigger signal, it writes 'LOW' to Arduino board and consequently to respective relay. 'LOW' signal was chosen because we used LOW Trigger Arduino board. If HIGH Trigger Arduino board is used, use respective Arduino Code on Github.
+                print("Sample Holder in Position") #InProcess measurment starts
+                break
+
+            else:
+                pass
+                print("Sample Holder NOT in Position")
+
+        except:
+            print("Interrupt")
+            break
+
+    MicroSwitch.close()
+    InProcess.close()
+
+
+#if system shows interrupt, please try to implement some sleep time for the system, either in Arduino code or python. The code itself works, but could be that system is overloaded.

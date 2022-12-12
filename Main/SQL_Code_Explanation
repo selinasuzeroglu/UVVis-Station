@@ -1,0 +1,52 @@
+import pyodbc
+import pandas as pd
+
+
+def fire_results(product, result):
+    cnxn_str = ("Driver={SQL Server};"
+                "Server=MU00195249\ZEISSSQL;"
+                "Database=InProcess;"
+                "Trusted_Connection=yes;"
+                "UID=sa;"
+                "PWD=ZeissSql2015!;")
+    cnxn = pyodbc.connect(cnxn_str)   #enabling connection to SQL
+
+    spectrum = '''SELECT * FROM InProcess.dbo.VSpectra''' #selecting every column from measurement database
+    data = pd.read_sql(spectrum, cnxn) #python reading all columns in VSpectra
+
+    #each row in SQL is one measurement. Hence, instead of a full table with wavelengths and values as columns, these results are saved as semicolon-seperated values in one cell withing each row of reults.
+    result_name = data.ResultName.str.split(";", expand=True, ) #those two don't need split functions generally but turns them to same type as the 'wavelengths' and 'values'
+    product_name = data.ProductName.str.split(";", expand=True, )
+
+    wavelengths = data.Wavelengths.str.split(";", expand=True, ) #SQL saves data reults for 'Wavelengths' and 'Values' as semicolon-seperated values. These have to be seperated, so they change from SSV in a single cell to rows filled with seperated values.
+    values = data.Values.str.split(";", expand=True, )
+    #timestamp = data.Timestamp.str.split(";", expand=True, )
+    #every desired column for final data set needs to be first called from SQL here. It is not possible (from my knowledge) to make classes out of them, because they are not compatible with the SQL conncetion.
+
+    class InProcessData:
+
+        def __init__(self, product_class, result_class, column):
+            self.product = product_class #chosen in InProcess
+            self.result = result_class # Transmission, Reflection, Absorption, ... also determined in InProcess
+            self.column = column #wavelength, values, timestamp (basically choosing results from respective column header in SQL)
+
+        def get_data(self):
+            result_name.rename(columns={0: 'ResultName'}, inplace=True) #defining column header for following step
+            product_name.rename(columns={0: 'ProductName'}, inplace=True)
+            result_index = result_name[result_name['ResultName'] == self.result].index.values #determing index/indices which refer to rows with desired result name (f.e. 'Transmission'). If rows with that name don't exist, we won't get result.
+            product_index = product_name[product_name['ProductName'] == self.product].index.values
+            data_index = list(set(product_index).intersection(result_index)) #creating lists of index intersections for ProductName and ResultName, f.e. we have 200 cells with ResultName 'Transission' but only one of them belongs to same row where our ProductName is 'Perovskite'. The row with that index number delivers our measurement reults.
+            recent_data_index = max(data_index)  # to get newest data with desired ProductName and ResultName, in case of multiple measurement rounds
+            transposed_data = self.column.transpose()  #'Values' and 'Wavelengths' rows ar transposed to columns
+            desired_data = transposed_data.iloc[:, recent_data_index] #only columns with index of desired measurement are selected (see data_index)
+            return desired_data
+
+    def joining_data(product_table, result_table):
+        value_column = InProcessData(product_table, result_table, values).get_data()
+        wavelength_column = InProcessData(product_table, result_table, wavelengths).get_data()
+        table = [wavelength_column, value_column]
+        results = pd.concat(table, axis=1, join="inner")
+        print(results)
+    return joining_data(product, result)
+
+    cnxn.close()
