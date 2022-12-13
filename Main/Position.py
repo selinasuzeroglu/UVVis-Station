@@ -1,6 +1,8 @@
+import time
+
 from zaber_motion import Units, Library
 from zaber_motion.ascii import Connection
-from Trigger_InProcess_Input import microswitch
+#from Trigger_InProcess_Input import microswitch
 from Trigger_InProcess_Output import fire_signal
 
 Library.enable_device_db_store()
@@ -73,9 +75,9 @@ with Connection.open_serial_port("COM7") as connection:
     axis2_pos1 = Axis(axis_2, 50)
     axes_pos1 = [axis1_pos1, axis2_pos1]  # creating lists of axes in their 1st position
     # # other lists can follow with subsequent position: pos2, pos3, ...
+    #
+    # homing()
+    # placing(axes_pos1)
 
-    homing()
-    placing(axes_pos1)
-
-microswitch()
-fire_signal('InProcess Test', 'Transmission')
+#microswitch()
+# fire_signal()

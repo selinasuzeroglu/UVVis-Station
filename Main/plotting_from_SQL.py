@@ -54,8 +54,9 @@ def fire_results():
         save_results_to = '/Users/S/PycharmProjects/Results/Tests' #adjust wherever you want to have yout picture location
         plt.savefig(save_results_to + 'image.png', dpi=300)
     return plotting()
+    cnxn.close()
 
 
 
 
-fire_results()
+#fire_results()
