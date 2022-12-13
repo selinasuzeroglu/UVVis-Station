@@ -50,9 +50,11 @@ def fire_results():
 
         custom_ylim = (0, 100)
         plt.setp((ax1, ax2), ylim=custom_ylim)
+
+        plt.savefig('my_plot')
+
         plt.show()
-        save_results_to = '/Users/S/PycharmProjects/Results/Tests' #adjust wherever you want to have yout picture location
-        plt.savefig(save_results_to + 'image.png', dpi=300)
+
     return plotting()
     cnxn.close()
 
