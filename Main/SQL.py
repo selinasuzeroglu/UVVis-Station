@@ -28,7 +28,6 @@ def fire_results(product, result):
             self.column = column
 
         def get_data(self):
-            transposed_data = self.column.transpose()
             result_name.rename(columns={0: 'ResultName'}, inplace=True)
             product_name.rename(columns={0: 'ProductName'}, inplace=True)
             result_index = result_name[result_name['ResultName'] == self.result].index.values
