@@ -25,7 +25,7 @@ plc = snap7.client.Client()
 plc.connect(IP, RACK, SLOT)
 
 while True:
-    readbit = read_memory(plc, 0, 1, 1)
+    readbit = read_memory(plc, 0, 1, S7WLBit)
     print(readbit) #if readbit TRUE, initiate SQL process
 
 

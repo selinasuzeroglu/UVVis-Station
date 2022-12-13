@@ -61,4 +61,4 @@ def joining_data(product_table, result_table):
 cnxn.close()
 
 
-#table('UVVis', 'Absorptance', 56)
+#

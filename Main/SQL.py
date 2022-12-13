@@ -48,4 +48,4 @@ def fire_results(product, result):
 
     cnxn.close()
 
-#fire_results('InProcess Output Test', 'Reflection')
+fire_results('InProcess Output Test', 'Reflection')
