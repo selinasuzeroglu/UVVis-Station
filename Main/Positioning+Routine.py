@@ -14,8 +14,8 @@ with Connection.open_serial_port("COM7") as connection:
     device1 = device_list[0]
     device2 = device_list[1]
 
-    axis_1 = device1.get_axis(1)  # get axis (1 out of 1) for device_v
-    axis_2 = device2.get_axis(1)  # get axis (1 out of 1) for device_h
+    axis_1 = device1.get_axis(1)  # get axis (1 out of 1) for device_1
+    axis_2 = device2.get_axis(1)  # get axis (1 out of 1) for device_2
 
 
     class Axis:
@@ -67,7 +67,8 @@ with Connection.open_serial_port("COM7") as connection:
 
 
     def unparking(axes_posn):
-        for axis in axes_posn: axis.unpark
+        for axis in axes_posn:
+            axis.unpark
 
 
     # # Define your axes and their 1st position:
@@ -78,6 +79,7 @@ with Connection.open_serial_port("COM7") as connection:
     #
     homing()
     placing(axes_pos1)
+    
 time.sleep(2)
 microswitch()
 time.sleep(2)
