@@ -1,6 +1,6 @@
 import serial
 import time
-from plotting_from_SQL import fire_results
+from SQL_Plot_Results import fire_results
 
 
 def fire_signal():
